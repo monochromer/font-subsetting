@@ -1,5 +1,4 @@
 importScripts('https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js')
-// import 'https://cdn.jsdelivr.net/pyodide/v0.23.2/full/pyodide.js';
 
 let pyodideReadyPromise
 

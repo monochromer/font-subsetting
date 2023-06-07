@@ -1,0 +1,217 @@
+:root {
+  --color-text: #333;
+  --color-bg: #f5f8fa;
+  --color-bg-contrast: #fff;
+  --color-fade: #e8e8e8;
+  --color-fade-2: #ccc;
+  --shadow-m: 0 3px 4px rgba(0, 0, 0, 0.1);
+  --space-l: 24px;
+  --space-m: 16px;
+  --space-s: 8px;
+  --border-radius-s: calc(4 / 20 * 1em);
+}
+
+body {
+  margin: 0;
+  box-sizing: border-box;
+  padding: var(--space-l);
+  font: calc(20 / 15 * 1rem)/1.5 sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+form {
+  --columns: 2;
+  margin-inline: auto;
+  max-width: 70ch;
+  padding: var(--space-l);
+  display: grid;
+  grid-gap: var(--space-m);
+  grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  background-color: var(--color-bg-contrast);
+  box-shadow: var(--shadow-m);
+  border-radius: var(--border-radius-s);
+}
+
+@media (max-width: calc(920 / 20 * 1em)) {
+  form {
+    --columns: 1;
+  }
+}
+
+fieldset {
+  border: 1px solid var(--color-fade);
+  border-radius: var(--border-radius-s);
+}
+
+form h1 {
+  margin: 0;
+  font-size: 1.25em;
+}
+
+form :where(h1, button[type="submit"]) {
+  grid-column: 1 / -1;
+}
+
+.choose-control {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-s);
+}
+
+  .choose-control > input {
+    --size: 20px;
+    appearance: none;
+    position: relative;
+    top: calc((15px - 10px) / 2);
+    margin: 0;
+    display: inline-block;
+    box-sizing: border-box;
+    width: var(--size);
+    height: var(--size);
+    border: 1px solid var(--color-fade-2);
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+    .choose-control > input::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      translate: -50% -50%;
+      scale: 1;
+      width: 50%;
+      height: 50%;
+      border-radius: 50%;
+      background-color: currentColor;
+      transition: 0.2s;
+    }
+
+    .choose-control > input:not(:checked)::before {
+      scale: 0;
+    }
+
+.file-control {
+  position: relative;
+  display: grid;
+  place-items: center;
+  place-content: center;
+  grid-gap: var(--space-s);
+  box-sizing: border-box;
+  border: 1px solid var(--color-fade-2);
+  padding: var(--space-m);
+  min-height: 100px;
+  border-radius: var(--border-radius-s);
+}
+
+  .file-control:hover {
+    background-color: var(--color-fade);
+  }
+
+  .file-control > input[type="file"] {
+    appearance: none;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    margin: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    color: transparent;
+    cursor: pointer;
+  }
+
+    .file-control > input[type="file"]::file-selector-button {
+      display: none; /* remove image preview from Safari */
+    }
+
+a.file-control {
+  grid-column: 1 / -1;
+  color: inherit;
+  text-decoration: none;
+}
+
+  a.file-control:not([href]) {
+    display: none;
+  }
+
+.text-control {
+  appearance: none;
+  margin: 0;
+  box-sizing: border-box;
+  padding: var(--space-m);
+  border: 1px solid var(--color-fade-2);
+  width: 100%;
+  border-radius: var(--border-radius-s);
+  font: inherit;
+}
+
+textarea.text-control {
+  resize: vertical;
+  max-height: calc(480 / 20 * 1rem);
+}
+
+.button {
+  margin: 0;
+  appearance: none;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: 1.6em auto 1.6em;
+  gap: var(--space-m);
+  padding: var(--space-m);
+  border: 0;
+  font: inherit;
+  color: #fff;
+  background-color: hsl(220 75% 40% / 1);
+  border-radius: var(--border-radius-s);
+  cursor: pointer;
+}
+
+  .button:focus {
+    outline-offset: 2px;
+  }
+
+  .button__loader {
+    position: relative;
+    box-sizing: border-box;
+    width: 1.6em;
+    height: 1.6em;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+
+    .button__loader::before {
+      content: '';
+      opacity: 0.1;
+      position: absolute;
+      inset: -2px;
+      border: inherit;
+      border-color: currentColor;
+      border-radius: 50%;
+    }
+
+    .button_is-loading .button__loader {
+      animation: rotate 1s infinite linear both;
+    }
+
+    .button:not(.button_is-loading) .button__loader {
+      visibility: hidden;
+      opacity: 0;
+    }
+
+    @keyframes rotate {
+      to {
+        transform: rotate(1turn);
+      }
+    }
