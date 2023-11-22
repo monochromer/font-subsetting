@@ -1,6 +1,13 @@
 importScripts('https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js')
 
 let pyodideReadyPromise
+let pythonSourcePromise
+
+async function loadPythonSource() {
+  const response = await fetch('subset.py');
+  const text = await response.text();
+  return text;
+}
 
 async function setupPyodide() {
   const pyodide = await loadPyodide()
@@ -58,12 +65,15 @@ waitPyodide()
   })
   .catch(console.error)
 
+pythonSourcePromise = loadPythonSource()
+  .catch(console.error)
+
 self.addEventListener('message', async (event) => {
   try {
     const { type, payload } = event.data
 
     if (type === 'file') {
-      const pythonSource = await fetch('subset.py').then((response) => response.text())
+      const pythonSource = await pythonSourcePromise
       const fileBuffer = await payload.file.arrayBuffer()
       const fileBufferView = new Uint8Array(fileBuffer)
       const outputFileBuffer = await subsetFontFromBuffer(fileBufferView, pythonSource, payload.options)
