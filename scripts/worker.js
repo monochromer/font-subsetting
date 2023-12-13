@@ -69,9 +69,9 @@ pythonSourcePromise = loadPythonSource()
   .catch(console.error)
 
 self.addEventListener('message', async (event) => {
-  try {
-    const { type, payload } = event.data
+  const { type, payload } = event.data
 
+  try {
     if (type === 'file') {
       const pythonSource = await pythonSourcePromise
       const fileBuffer = await payload.file.arrayBuffer()
@@ -87,5 +87,12 @@ self.addEventListener('message', async (event) => {
     }
   } catch (error) {
     console.error(error)
+    self.postMessage({
+      type: 'error',
+      payload: {
+        fileId: payload.fileId,
+        error
+      }
+    })
   }
 })

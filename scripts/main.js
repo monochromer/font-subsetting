@@ -2,7 +2,7 @@ import { formatFileSize, parseFileName } from './utils.js';
 const worker = new Worker(new URL('worker.js', import.meta.url))
 
 function subsetFont(file, options) {
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const opts = {
       'desubroutinize': false,
       'no-hinting': false,
@@ -29,9 +29,13 @@ function subsetFont(file, options) {
     worker.addEventListener('message', function onWorkerMessage(event) {
       const { type, payload } = event.data
 
-      if (type === 'file' && fileId === payload.fileId) {
+      if (fileId === payload.fileId) {
         worker.removeEventListener('message', onWorkerMessage)
-        resolve(payload)
+        if (type === 'file' ) {
+          resolve(payload)
+        } else if (type === 'error') {
+          reject(payload.error)
+        }
       }
     })
   })
